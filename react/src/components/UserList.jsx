@@ -12,6 +12,7 @@ export default function UserList({ count }) {
       .then(data => setUsers(data.results))
       .catch(err => console.error(err));
   }, [count]); 
+  
 
   return (
     <div>
