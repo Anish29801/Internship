@@ -174,3 +174,129 @@
   }
   return s.slice(start, end + 1);
 }
+// 15 New LeetCode-style Array & String Problems in TypeScript
+
+// ---------------------- EASY ----------------------
+
+// 1. Contains Duplicate
+ function containsDuplicate(nums: number[]): boolean {
+  return new Set(nums).size !== nums.length;
+}
+
+// 2. Single Number
+ function singleNumber(nums: number[]): number {
+  return nums.reduce((a, b) => a ^ b, 0);
+}
+
+// 3. Maximum Product of Two Elements
+ function maxProduct(nums: number[]): number {
+  nums.sort((a, b) => b - a);
+  return (nums[0] - 1) * (nums[1] - 1);
+}
+
+// 4. Count of Even Numbers
+ function countEvens(nums: number[]): number {
+  return nums.filter(n => n % 2 === 0).length;
+}
+
+// 5. Find All Numbers Disappeared in an Array
+ function findDisappearedNumbers(nums: number[]): number[] {
+  const set = new Set(nums);
+  return Array.from({ length: nums.length }, (_, i) => i + 1).filter(n => !set.has(n));
+}
+
+// 6. Reverse String
+ function reverseString(s: string[]): void {
+  let l = 0, r = s.length - 1;
+  while (l < r) [s[l], s[r]] = [s[r], s[l]], l++, r--;
+}
+
+// 7. Reverse Words in a String III
+ function reverseWords(s: string): string {
+  return s.split(' ').map(w => w.split('').reverse().join('')).join(' ');
+}
+
+// 8. Implement strStr()
+ function strStr(haystack: string, needle: string): number {
+  return haystack.indexOf(needle);
+}
+
+// 9. Length of Last Word
+ function lengthOfLastWord(s: string): number {
+  return s.trim().split(' ').pop()!.length;
+}
+
+// 10. Shuffle the Array
+ function shuffle(nums: number[], n: number): number[] {
+  const result: number[] = [];
+  for (let i = 0; i < n; i++) {
+    result.push(nums[i], nums[i + n]);
+  }
+  return result;
+}
+
+// ---------------------- MEDIUM ----------------------
+
+// 11. Sort Colors (Dutch National Flag)
+ function sortColors(nums: number[]): void {
+  let low = 0, mid = 0, high = nums.length - 1;
+  while (mid <= high) {
+    if (nums[mid] === 0) [nums[low++], nums[mid++]] = [nums[mid], nums[low]];
+    else if (nums[mid] === 1) mid++;
+    else [nums[mid], nums[high--]] = [nums[high], nums[mid]];
+  }
+}
+
+// 12. Spiral Matrix
+ function spiralOrder(matrix: number[][]): number[] {
+  const res: number[] = [];
+  let top = 0, bottom = matrix.length - 1, left = 0, right = matrix[0].length - 1;
+  while (top <= bottom && left <= right) {
+    for (let i = left; i <= right; i++) res.push(matrix[top][i]);
+    top++;
+    for (let i = top; i <= bottom; i++) res.push(matrix[i][right]);
+    right--;
+    if (top <= bottom) for (let i = right; i >= left; i--) res.push(matrix[bottom][i]);
+    bottom--;
+    if (left <= right) for (let i = bottom; i >= top; i--) res.push(matrix[i][left]);
+    left++;
+  }
+  return res;
+}
+
+// 13. Rotate Image
+ function rotate(matrix: number[][]): void {
+  const n = matrix.length;
+  for (let i = 0; i < n; i++) {
+    for (let j = i; j < n; j++) {
+      [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+    }
+  }
+  for (const row of matrix) row.reverse();
+}
+
+// 14. Increasing Triplet Subsequence
+ function increasingTriplet(nums: number[]): boolean {
+  let first = Infinity, second = Infinity;
+  for (const n of nums) {
+    if (n <= first) first = n;
+    else if (n <= second) second = n;
+    else return true;
+  }
+  return false;
+}
+
+// 15. Set Matrix Zeroes
+ function setZeroes(matrix: number[][]): void {
+  const rows = new Set<number>(), cols = new Set<number>();
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[0].length; j++) {
+      if (matrix[i][j] === 0) {
+        rows.add(i);
+        cols.add(j);
+      }
+    }
+  }
+  for (const r of rows) for (let j = 0; j < matrix[0].length; j++) matrix[r][j] = 0;
+  for (const c of cols) for (let i = 0; i < matrix.length; i++) matrix[i][c] = 0;
+}
