@@ -1,5 +1,4 @@
-// 15 LeetCode-style Array & String problems in TypeScript
-
+// 7 Nov
 // ---------------------- EASY ----------------------
 
 // 1. Two Sum
@@ -174,8 +173,8 @@
   }
   return s.slice(start, end + 1);
 }
-// 15 New LeetCode-style Array & String Problems in TypeScript
 
+// 8 Nov
 // ---------------------- EASY ----------------------
 
 // 1. Contains Duplicate
@@ -299,4 +298,161 @@
   }
   for (const r of rows) for (let j = 0; j < matrix[0].length; j++) matrix[r][j] = 0;
   for (const c of cols) for (let i = 0; i < matrix.length; i++) matrix[i][c] = 0;
+}
+
+// 9 Nov
+// ---------------------- EASY ----------------------
+
+// 1. Majority Element
+function majorityElement(nums: number[]): number {
+  let count = 0, candidate = 0;
+  for (const num of nums) {
+    if (count === 0) candidate = num;
+    count += num === candidate ? 1 : -1;
+  }
+  return candidate;
+}
+
+// 2. Missing Number
+function missingNumber(nums: number[]): number {
+  const n = nums.length;
+  const expected = (n * (n + 1)) / 2;
+  const actual = nums.reduce((a, b) => a + b, 0);
+  return expected - actual;
+}
+
+// 3. Third Maximum Number
+function thirdMax(nums: number[]): number {
+  const set = Array.from(new Set(nums)).sort((a, b) => b - a);
+  return set[2] ?? set[0];
+}
+
+// 4. Intersection of Two Arrays
+function intersection(nums1: number[], nums2: number[]): number[] {
+  return Array.from(new Set(nums1.filter(n => nums2.includes(n))));
+}
+
+// 5. Move Zeroes (In-place)
+function moveZeroesSimple(nums: number[]): void {
+  let idx = 0;
+  for (const num of nums) if (num !== 0) nums[idx++] = num;
+  while (idx < nums.length) nums[idx++] = 0;
+}
+
+// 6. Valid Parentheses
+function isValid(s: string): boolean {
+  const stack: string[] = [];
+  const map: Record<string, string> = { ")": "(", "}": "{", "]": "[" };
+  for (const c of s) {
+    if (["(", "{", "["].includes(c)) stack.push(c);
+    else if (stack.pop() !== map[c]) return false;
+  }
+  return stack.length === 0;
+}
+
+// 7. Ransom Note
+function canConstruct(ransomNote: string, magazine: string): boolean {
+  const map = new Map<string, number>();
+  for (const c of magazine) map.set(c, (map.get(c) || 0) + 1);
+  for (const c of ransomNote) {
+    if (!map.get(c)) return false;
+    map.set(c, map.get(c)! - 1);
+  }
+  return true;
+}
+
+// 8. First Unique Character in a String
+function firstUniqChar(s: string): number {
+  const map = new Map<string, number>();
+  for (const c of s) map.set(c, (map.get(c) || 0) + 1);
+  for (let i = 0; i < s.length; i++) if (map.get(s[i]) === 1) return i;
+  return -1;
+}
+
+// 9. Valid Palindrome II (Allow one deletion)
+function validPalindrome(s: string): boolean {
+  const isPal = (l: number, r: number): boolean => {
+    while (l < r) if (s[l++] !== s[r--]) return false;
+    return true;
+  };
+  let l = 0, r = s.length - 1;
+  while (l < r) {
+    if (s[l] !== s[r]) return isPal(l + 1, r) || isPal(l, r - 1);
+    l++; r--;
+  }
+  return true;
+}
+
+// 10. Toeplitz Matrix
+function isToeplitzMatrix(matrix: number[][]): boolean {
+  for (let i = 0; i < matrix.length - 1; i++) {
+    for (let j = 0; j < matrix[0].length - 1; j++) {
+      if (matrix[i][j] !== matrix[i + 1][j + 1]) return false;
+    }
+  }
+  return true;
+}
+
+// ---------------------- MEDIUM ----------------------
+
+// 11. Container With Most Water
+function maxArea(height: number[]): number {
+  let l = 0, r = height.length - 1, max = 0;
+  while (l < r) {
+    const area = Math.min(height[l], height[r]) * (r - l);
+    max = Math.max(max, area);
+    if (height[l] < height[r]) l++;
+    else r--;
+  }
+  return max;
+}
+
+// 12. Jump Game
+function canJump(nums: number[]): boolean {
+  let reach = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (i > reach) return false;
+    reach = Math.max(reach, i + nums[i]);
+  }
+  return true;
+}
+
+// 13. Subarray Sum Equals K
+function subarraySum(nums: number[], k: number): number {
+  const map = new Map<number, number>([[0, 1]]);
+  let sum = 0, count = 0;
+  for (const n of nums) {
+    sum += n;
+    if (map.has(sum - k)) count += map.get(sum - k)!;
+    map.set(sum, (map.get(sum) || 0) + 1);
+  }
+  return count;
+}
+
+// 14. Find Minimum in Rotated Sorted Array
+function findMin(nums: number[]): number {
+  let l = 0, r = nums.length - 1;
+  while (l < r) {
+    const mid = Math.floor((l + r) / 2);
+    if (nums[mid] > nums[r]) l = mid + 1;
+    else r = mid;
+  }
+  return nums[l];
+}
+
+// 15. Longest Consecutive Sequence
+function longestConsecutive(nums: number[]): number {
+  const set = new Set(nums);
+  let longest = 0;
+  for (const num of set) {
+    if (!set.has(num - 1)) {
+      let curr = num, streak = 1;
+      while (set.has(curr + 1)) {
+        curr++;
+        streak++;
+      }
+      longest = Math.max(longest, streak);
+    }
+  }
+  return longest;
 }
